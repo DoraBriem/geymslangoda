@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="is">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Göngur 2020–2022 — Alviðra</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;1,9..144,500&display=swap');
+:root {
+  --bg:#eef1e5; --card:#fffdf9; --ink:#2a2521; --sub:#6b6259; --line:#e6ddcc;
+  --accent:#7a5c3e; --accent2:#4f6b4a; --shadow:rgba(60,45,25,.14);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg:#181613; --card:#242019; --ink:#ede7de; --sub:#a89e91; --line:#3a352c;
+    --accent:#d7b98c; --accent2:#8fb389; --shadow:rgba(0,0,0,.45);
+  }
+}
+:root[data-theme="dark"] {
+  --bg:#181613; --card:#242019; --ink:#ede7de; --sub:#a89e91; --line:#3a352c;
+  --accent:#d7b98c; --accent2:#8fb389; --shadow:rgba(0,0,0,.45);
+}
+* { box-sizing:border-box; }
+html { scroll-behavior:smooth; }
+body {
+  background-color:var(--bg); color:var(--ink);
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; margin:0; line-height:1.6;
+}
+.layout { display:flex; align-items:flex-start; max-width:1400px; margin:0 auto; }
+.sidebar { flex:0 0 250px; width:250px; position:sticky; top:0; height:100vh; overflow-y:auto;
+  background:var(--card); border-right:1px solid var(--line); padding:24px 14px; }
+.sidebar .sb-title { display:block; font-family:'Fraunces',Georgia,serif; font-size:1.45rem; font-weight:600;
+  color:var(--ink); text-decoration:none; padding:0 10px; margin-bottom:18px; }
+.sidebar .sb-title:hover { color:var(--accent2); }
+.sidebar a.sb-link { display:block; padding:10px 12px; margin-bottom:3px; border-radius:10px;
+  text-decoration:none; color:var(--ink); font-size:0.9rem; line-height:1.3; font-weight:700; }
+.sidebar a.sb-link:hover { background:var(--bg); }
+.sidebar a.sb-link.active { background:var(--accent2); color:#fdfaf4; font-weight:700; }
+.sidebar a.sb-link .sb-num { display:block; font-size:0.7rem; letter-spacing:.06em; text-transform:uppercase; opacity:.75; }
+.main { flex:1 1 auto; min-width:0; }
+@media (max-width:820px) {
+  .layout { flex-direction:column; }
+  .sidebar { position:relative; width:100%; height:auto; top:auto; border-right:none; border-bottom:1px solid var(--line);
+    padding:14px; overflow-y:visible; }
+  .sidebar .sb-title { padding:0 4px 10px; }
+  .sidebar .sb-list { display:flex; gap:6px; overflow-x:auto; padding-bottom:4px; }
+  .sidebar a.sb-link { flex:0 0 auto; white-space:nowrap; margin-bottom:0; }
+}
+.wrap { max-width:900px; margin:0 auto; padding:0 24px 70px; }
+h1, h2.chtitle, .hero-content h2 { font-family:'Fraunces',Georgia,serif; font-weight:600; }
+h1 { font-size:2.1rem; margin:0 0 8px; }
+h2.chtitle { font-size:1.15rem; color:var(--sub); font-weight:500; margin:0 0 22px; text-transform:uppercase; letter-spacing:.08em; }
+p.lead { color:var(--sub); font-size:1rem; margin:0 0 28px; max-width:640px; }
+.crumbs { font-size:0.85rem; padding:18px 0 6px; }
+.crumbs a { color:var(--accent); text-decoration:none; }
+.crumbs a:hover { text-decoration:underline; }
+
+/* ---- page header (plain, no panel/photo behind it) ---- */
+.hero { margin:22px 0 30px; padding:0; }
+.hero.big { margin:28px 0 34px; }
+.hero-content h1, .hero-content h2 { color:var(--ink); margin:0 0 6px; }
+.hero-content .hk { font-size:0.8rem; letter-spacing:.14em; text-transform:uppercase; color:var(--accent2); font-weight:600; margin-bottom:6px; }
+.hero-content p { margin:6px 0 0; color:var(--sub); max-width:640px; font-size:0.95rem; }
+
+/* ---- chapter grid (index) ---- */
+.grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(230px,1fr)); gap:18px; margin-bottom:36px; }
+.card { display:block; background:var(--card); border:1px solid var(--line); border-radius:16px; overflow:hidden;
+  text-decoration:none; color:var(--ink); transition:transform .18s, box-shadow .18s; box-shadow:0 4px 14px var(--shadow); }
+.card:hover { transform:translateY(-4px); box-shadow:0 14px 28px var(--shadow); }
+.card .imgwrap { position:relative; height:170px; overflow:hidden; background:var(--line); }
+.card .imgwrap img { width:100%; height:100%; object-fit:cover; display:block; transition:transform .4s; }
+.card:hover .imgwrap img { transform:scale(1.06); }
+.card .cbody { padding:14px 16px 16px; }
+.card .num { font-size:0.7rem; text-transform:uppercase; letter-spacing:.09em; color:var(--accent2); font-weight:600; }
+.card .title { font-family:'Fraunces',Georgia,serif; font-size:1.15rem; font-weight:600; margin:3px 0 5px; }
+.card .meta { font-size:0.8rem; color:var(--sub); }
+
+footer { text-align:center; color:var(--sub); font-size:0.8rem; margin-top:40px; padding-top:20px; border-top:1px solid var(--line); }
+
+/* ---- text sections ---- */
+.section-text-wrap { position:relative; background:var(--card); border-radius:16px; padding:22px 26px 22px 30px;
+  margin:26px 0; box-shadow:0 6px 18px var(--shadow); border-left:4px solid var(--accent2); }
+.section-text { white-space:pre-wrap; font-size:1.04rem; margin:0; color:var(--ink); }
+
+/* ---- Inngangsorð: special intro layout ---- */
+.intro-card { background:var(--card); border-radius:18px; padding:32px 30px; margin:22px 0 34px;
+  box-shadow:0 6px 18px var(--shadow); text-align:center; }
+.intro-title { font-family:'Fraunces',Georgia,serif; font-size:2.5rem; font-weight:600; margin:0 0 6px; }
+.intro-subtitle { color:var(--sub); font-size:1.08rem; margin:0 0 18px; }
+.intro-credits { color:var(--sub); font-size:0.85rem; line-height:1.8; }
+.prose-block { margin:30px 0; }
+.prose-block h3 { font-family:'Fraunces',Georgia,serif; font-weight:600; font-size:1.35rem; color:var(--accent2); margin:0 0 14px; }
+.prose-block p { margin:0 0 16px; font-size:1.02rem; }
+.prose-block p:last-child { margin-bottom:0; }
+.info-list { list-style:none; margin:0; padding:0; border:1px solid var(--line); border-radius:14px; overflow:hidden; }
+.info-list li { padding:9px 16px; font-size:0.86rem; border-bottom:1px solid var(--line); }
+.info-list li:last-child { border-bottom:none; }
+.info-list li:nth-child(even) { background:var(--bg); }
+
+.roster-table-wrap { overflow-x:auto; border:1px solid var(--line); border-radius:14px; }
+.roster-table { width:100%; border-collapse:collapse; font-size:0.86rem; }
+.roster-table th { text-align:left; padding:10px 16px; background:var(--bg); font-weight:700; font-size:0.74rem;
+  text-transform:uppercase; letter-spacing:.05em; color:var(--sub); border-bottom:1px solid var(--line); white-space:nowrap; }
+.roster-table td { padding:9px 16px; border-bottom:1px solid var(--line); vertical-align:top; }
+.roster-table tbody tr:last-child td { border-bottom:none; }
+.roster-table tbody tr:nth-child(even) td { background:var(--bg); }
+.roster-table td.rd, .roster-table td.rdd { white-space:nowrap; color:var(--sub); font-variant-numeric:tabular-nums; }
+
+.event-lead { font-size:0.95rem; margin:0 0 14px; padding:12px 16px; background:var(--card); border:1px solid var(--line); border-radius:12px; }
+.event-table-wrap { overflow-x:auto; border:1px solid var(--line); border-radius:14px; }
+.event-table { width:100%; border-collapse:collapse; font-size:0.86rem; }
+.event-table td { padding:9px 16px; border-bottom:1px solid var(--line); vertical-align:top; }
+.event-table tr:last-child td { border-bottom:none; }
+.event-table tr:nth-child(even) td { background:var(--bg); }
+.event-table td.ed { white-space:nowrap; width:1%; color:var(--sub); font-variant-numeric:tabular-nums; }
+
+/* ---- standalone feature photo (e.g. a map), kept out of the paired grid ---- */
+.feature-photo { margin:30px 0; background:var(--card); border-radius:16px; padding:18px; box-shadow:0 6px 18px var(--shadow); text-align:center; }
+.feature-photo img { max-width:100%; max-height:560px; width:auto; border-radius:10px; cursor:zoom-in; }
+.feature-photo figcaption { margin-top:14px; color:var(--ink); font-size:0.92rem; font-weight:700; text-align:left; }
+
+/* ---- photo grid: two side by side ---- */
+.photo-grid { display:grid; grid-template-columns:repeat(2, 1fr); gap:18px; margin:26px 0; }
+.photocard { background:var(--card); border-radius:16px; overflow:hidden; box-shadow:0 6px 18px var(--shadow); margin:0; }
+.photocard img { width:100%; aspect-ratio:4/3; object-fit:cover; display:block; cursor:zoom-in; background:var(--line); }
+.photocard figcaption { padding:10px 14px 14px; color:var(--ink); font-size:0.88rem; font-weight:700; }
+.photocard.group { grid-column:1 / -1; }
+.photocard.group .subrow { display:grid; grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); gap:8px; padding:12px 12px 0; }
+.photocard.group .subrow img { aspect-ratio:4/3; border-radius:10px; }
+@media (max-width:560px) { .photo-grid { grid-template-columns:1fr; } }
+
+.navbtns { display:flex; justify-content:space-between; margin:40px 0 0; gap:12px; }
+.navbtns a { flex:1; text-align:center; padding:14px 16px; border:1px solid var(--line); border-radius:12px;
+  text-decoration:none; color:var(--ink); background:var(--card); font-size:0.92rem; box-shadow:0 3px 10px var(--shadow); }
+.navbtns a:hover { border-color:var(--accent2); }
+
+#lightbox { position:fixed; inset:0; background:rgba(10,8,6,.92); display:none; align-items:center; justify-content:center; z-index:99; cursor:zoom-out; }
+#lightbox.open { display:flex; }
+#lightbox img { max-width:94vw; max-height:92vh; border-radius:8px; box-shadow:0 20px 60px rgba(0,0,0,.6); }
+</style>
+</head>
+<body>
+<div class="layout">
+  <nav class="sidebar">
+      <a class="sb-title" href="index.html">Alviðra</a>
+      <div class="sb-list">
+        <a class="sb-link" href="chapter_01.html"><span class="sb-num">Kafli 1</span>Inngangsorð</a><a class="sb-link" href="chapter_02.html"><span class="sb-num">Kafli 2</span>Göngur 2007–2009</a><a class="sb-link" href="chapter_03.html"><span class="sb-num">Kafli 3</span>Göngur 2010</a><a class="sb-link" href="chapter_04.html"><span class="sb-num">Kafli 4</span>Göngur 2011</a><a class="sb-link" href="chapter_05.html"><span class="sb-num">Kafli 5</span>Göngur 2012</a><a class="sb-link" href="chapter_06.html"><span class="sb-num">Kafli 6</span>Göngur 2013</a><a class="sb-link" href="chapter_07.html"><span class="sb-num">Kafli 7</span>Göngur 2014</a><a class="sb-link" href="chapter_08.html"><span class="sb-num">Kafli 8</span>Göngur 2015</a><a class="sb-link" href="chapter_09.html"><span class="sb-num">Kafli 9</span>Göngur 2016–2019</a><a class="sb-link active" href="chapter_10.html"><span class="sb-num">Kafli 10</span>Göngur 2020–2022</a><a class="sb-link" href="chapter_11.html"><span class="sb-num">Kafli 11</span>Göngur 2023–2026</a><a class="sb-link" href="chapter_12.html"><span class="sb-num">Kafli 12</span>Náttúra í Elliðaárdal</a>
+      </div>
+    </nav>
+  <div class="main">
+    <div class="wrap">
+      <div class="hero">
+      <div class="hero-content">
+        <div class="hk">Kafli 10</div>
+        <h2>Göngur 2020–2022</h2>
+        <p>54 myndir</p>
+      </div>
+    </div>
+      <div class="photo-grid"><figure class="photocard"><img src="images/ch10/0001.jpg" loading="lazy" alt="" onclick="openLightbox('images/ch10/0001.jpg')"><figcaption>15.2.2020. Ólafur Sigurðsson, Bernharður, Guðrún, Sveinbjörn.</figcaption></figure><figure class="photocard"><img src="images/ch10/0002.jpg" loading="lazy" alt="" onclick="openLightbox('images/ch10/0002.jpg')"><figcaption>15.2.2020. Bernharður og Sigurður Egill.</figcaption></figure><figure class="photocard"><img src="images/ch10/0003.jpg" loading="lazy" alt="" onclick="openLightbox('images/ch10/0003.jpg')"><figcaption>27.2.2020. Tenerife. Jóna, Kristín Guðmunds, Sigrún, Jónas, Ólafur Gíslason, Gerða, Sigurður Egill.</figcaption></figure><figure class="photocard"><img src="images/ch10/0004.jpg" loading="lazy" alt="" onclick="openLightbox('images/ch10/0004.jpg')"><figcaption>Ása Jónsdóttir fæddist 22. ágúst 1936. Hún lést 23. apríl 2020.</figcaption></figure><figure class="photocard"><img src="images/ch10/0005.jpg" loading="lazy" alt="" onclick="openLightbox('images/ch10/0005.jpg')"><figcaption>Jón Birgir Jónsson fæddist 23. apríl 1936. Hann lést 22. ágúst 2020.</figcaption></figure><figure class="photocard"><img src="images/ch10/0006.jpg" loading="lazy" alt="" onclick="openLightbox('images/ch10/0006.jpg')"><figcaption>24.9.2020. Guðrún, Jóna, Svava.</figcaption></figure><figure class="photocard"><img src="images/ch10/0007.jpg" loading="lazy" alt="" onclick="openLightbox('images/ch10/0007.jpg')"><figcaption>5.6.2021. Fremri röð: Ólafur Sigurðsson, Jóna, Jónas, Sveinbjörn. Aftari röð: Gerða, Svava, Sigurður Egill, Sigurður Briem.</figcaption></figure><figure class="photocard"><img src="images/ch10/0008.jpg" loading="lazy" alt="" onclick="openLightbox('images/ch10/0008.jpg')"><figcaption>23.6.2021. Vorferð MR56 að Odda. Jakob, Þóra.</figcaption></figure><figure class="photocard"><img src="images/ch10/0009.jpg" loading="lazy" alt="" onclick="openLightbox('images/ch10/0009.jpg')"><figcaption>24.7.2021. Skáfoss í blóma.</figcaption></figure><figure class="photocard"><img src="images/ch10/0010.jpg" loading="lazy" alt="" onclick="openLightbox('images/ch10/0010.jpg')"><figcaption>24.7.2021. Sveinbjörn, Sigurður Briem, Guðrún.</figcaption></figure><figure class="photocard"><img src="images/ch10/0011.jpg" loading="lazy" alt="" onclick="openLightbox('images/ch10/0011.jpg')"><figcaption>24.7.2021. Svava og Jóna.</figcaption></figure><figure class="photocard"><img src="images/ch10/0012.jpg" loading="lazy" alt="" onclick="openLightbox('images/ch10/0012.jpg')"><figcaption>24.7.2021. Jónas, Guðrún, Björn, Svava.</figcaption></figure><figure class="photocard"><img src="images/ch10/0013.jpg" loading="lazy" alt="" onclick="openLightbox('images/ch10/0013.jpg')"><figcaption>24.7.2021. Sigurður Briem, Egill, Sveinbjörn, Jakob, Ólafur Gíslason, Gerða, Jónas</figcaption></figure><figure class="photocard"><img src="images/ch10/0014.jpg" loading="lazy" alt="" onclick="openLightbox('images/ch10/0014.jpg')"><figcaption>24.7.2021. Jakob, Ólafur Gíslason, Gísli Ólafsson, Gerða.</figcaption></figure><figure class="photocard"><img src="images/ch10/0015.jpg" loading="lazy" alt="" onclick="openLightbox('images/ch10/0015.jpg')"><figcaption>24.7.2021. Sigurður Briem, Egill, Sveinbjörn, Jakob.</figcaption></figure><figure class="photocard"><img src="images/ch10/0016.jpg" loading="lazy" alt="" onclick="openLightbox('images/ch10/0016.jpg')"><figcaption>24.7.2021. Sigurður Egill, Jóna, Sigurður Briem, Egill, Sveinbjörn. 24.7.2022???</figcaption></figure><figure class="photocard"><img src="images/ch10/0017.jpg" loading="lazy" alt="" onclick="openLightbox('images/ch10/0017.jpg')"><figcaption>24.7.2021. Svava, Ólafur Sigurðsson, Sigurður Egill, Jóna, Sigurður Briem.</figcaption></figure><figure class="photocard"><img src="images/ch10/0018.jpg" loading="lazy" alt="" onclick="openLightbox('images/ch10/0018.jpg')"><figcaption>31.7.2021. Ólafur Sigurðsson, Sigurður Briem, Jóna, Svava, Sveinbjörn, Orest, Guðrún.</figcaption></figure><figure class="photocard"><img src="images/ch10/0019.jpg" loading="lazy" alt="" onclick="openLightbox('images/ch10/0019.jpg')"><figcaption>14.8. 2021. Sigurður Egill, Ólafur Sigurðsson, Kaja, Jóna, Guðrún, Sveinbjörn, Svava, Sigurður Briem.</figcaption></figure><figure class="photocard"><img src="images/ch10/0020.jpg" loading="lazy" alt="" onclick="openLightbox('images/ch10/0020.jpg')"><figcaption>14.8.2021. Ólafur Sigurðsson, Kaja, Jóna, Guðrún, Svava, Sveinbjörn, Birna Þorvaldsdóttir, barnabarn Sveinbjarnar.</figcaption></figure><figure class="photocard"><img src="images/ch10/0021.jpg" loading="lazy" alt="" onclick="openLightbox('images/ch10/0021.jpg')"><figcaption>14.8.2021. Guðrún, Jóna.</figcaption></figure><figure class="photocard"><img src="images/ch10/0022.jpg" loading="lazy" alt="" onclick="openLightbox('images/ch10/0022.jpg')"><figcaption>14.8.2021. Svava, Sigurður Briem, Ólafur Sigurðsson, Jónas, Sigrún, Guðrún, Ragnheiður Gerða, Ólafur Gíslason, Kaja, Ólafur Egilsson, Egill.</figcaption></figure><figure class="photocard"><img src="images/ch10/0023.jpg" loading="lazy" alt="" onclick="openLightbox('images/ch10/0023.jpg')"><figcaption>14.8.2021. Guðrún, Ragnheiður.</figcaption></figure><figure class="photocard"><img src="images/ch10/0024.jpg" loading="lazy" alt="" onclick="openLightbox('images/ch10/0024.jpg')"><figcaption>9.9.2021. Sigurður Briem, Jóna, Guðrún, Sveinbjörn.</figcaption></figure><figure class="photocard"><img src="images/ch10/0025.jpg" loading="lazy" alt="" onclick="openLightbox('images/ch10/0025.jpg')"><figcaption>13.9.2021. Jónas, Sigurður Briem, Sigurður Egill, Sveinbjörn.</figcaption></figure><figure class="photocard"><img src="images/ch10/0026.jpg" loading="lazy" alt="" onclick="openLightbox('images/ch10/0026.jpg')"><figcaption>13.9.2021. Jakob.</figcaption></figure><figure class="photocard"><img src="images/ch10/0027.jpg" loading="lazy" alt="" onclick="openLightbox('images/ch10/0027.jpg')"><figcaption>20.9.2021. Guðrún, Svava, Jóna.</figcaption></figure><figure class="photocard"><img src="images/ch10/0028.jpg" loading="lazy" alt="" onclick="openLightbox('images/ch10/0028.jpg')"><figcaption>2.10.2021. Gerða, Sigurður Egill, Guðrún, Sveinbjörn, Jóna, Svava, Sigrún, Bernharður, Sigurður Briem. Ólafur Sigurðsson tók myndina ?.</figcaption></figure><figure class="photocard"><img src="images/ch10/0029.jpg" loading="lazy" alt="" onclick="openLightbox('images/ch10/0029.jpg')"><figcaption>2.10.2021. Ólafur Sigurðsson, Guðrún, Sveinbjörn, Jóna, Svava, Bernharður, Sigurður Briem. Mynd Sigurður Egill.</figcaption></figure><figure class="photocard"><img src="images/ch10/0030.jpg" loading="lazy" alt="" onclick="openLightbox('images/ch10/0030.jpg')"><figcaption>2.10.2021. Minningarskjöldur um Kjartan Sveinsson, frumkvöðul í trjárækt í Elliðaárdal.</figcaption></figure><figure class="photocard"><img src="images/ch10/0031.jpg" loading="lazy" alt="" onclick="openLightbox('images/ch10/0031.jpg')"><figcaption>2.10.2021. Ólafur Gíslason, Gerða, Ólafur Sigurðsson, Björn</figcaption></figure><figure class="photocard"><img src="images/ch10/0032.jpg" loading="lazy" alt="" onclick="openLightbox('images/ch10/0032.jpg')"><figcaption>2.10.2021. Guðrún, Sveinbjörn, Jakob.</figcaption></figure><figure class="photocard"><img src="images/ch10/0033.jpg" loading="lazy" alt="" onclick="openLightbox('images/ch10/0033.jpg')"><figcaption>2.10.2021 Angelika með kaffi latté.</figcaption></figure><figure class="photocard"><img src="images/ch10/0034.jpg" loading="lazy" alt="" onclick="openLightbox('images/ch10/0034.jpg')"><figcaption>Kunnugleg andlit. Sigríður Soffía og Maggi Jónsson.</figcaption></figure><figure class="photocard"><img src="images/ch10/0035.jpg" loading="lazy" alt="" onclick="openLightbox('images/ch10/0035.jpg')"><figcaption>Pálmi Lárusson fæddist 27. febrúar 1937. Hann lést 4. febrúar 2022.</figcaption></figure><figure class="photocard"><img src="images/ch10/0036.jpg" loading="lazy" alt="" onclick="openLightbox('images/ch10/0036.jpg')"><figcaption>10.3.2022. Á Jakobsvegi. Jakob, Ólafur Sigurðsson, Svava, Sigurður Briem.</figcaption></figure><figure class="photocard"><img src="images/ch10/0037.jpg" loading="lazy" alt="" onclick="openLightbox('images/ch10/0037.jpg')"><figcaption>26.5.2022. Jónas 84 ára. Sigurður Egill, Jóna, Sigurður Briem, Jónas, Jakob, Guðrún. Mynd tekin af þjóni á síma Sigurðar Egils.</figcaption></figure><figure class="photocard"><img src="images/ch10/0038.jpg" loading="lazy" alt="" onclick="openLightbox('images/ch10/0038.jpg')"><figcaption>28.5.2022 Jakob, Sigurður Briem, Jóna, Ólafur Sigurðsson, Svava, Egill, Jónas, Ragnheiður, Guðrún.</figcaption></figure><figure class="photocard"><img src="images/ch10/0039.jpg" loading="lazy" alt="" onclick="openLightbox('images/ch10/0039.jpg')"><figcaption>28.5.2022. Jóna, Ólafur Sigurðsson, Svava, Egill, Jónas, Ragnheiður, Guðrún, Björn, Sveinbjörn , Jakob, Sigurður Briem</figcaption></figure><figure class="photocard"><img src="images/ch10/0040.jpg" loading="lazy" alt="" onclick="openLightbox('images/ch10/0040.jpg')"><figcaption>15.8.2022. Guðrún, Svava, Jóna.</figcaption></figure><figure class="photocard group"><div class="subrow"><img src="images/ch10/0041.jpg" loading="lazy" alt="" onclick="openLightbox('images/ch10/0041.jpg')"><img src="images/ch10/0042.jpg" loading="lazy" alt="" onclick="openLightbox('images/ch10/0042.jpg')"><img src="images/ch10/0043.jpg" loading="lazy" alt="" onclick="openLightbox('images/ch10/0043.jpg')"><img src="images/ch10/0044.jpg" loading="lazy" alt="" onclick="openLightbox('images/ch10/0044.jpg')"><img src="images/ch10/0045.jpg" loading="lazy" alt="" onclick="openLightbox('images/ch10/0045.jpg')"><img src="images/ch10/0046.jpg" loading="lazy" alt="" onclick="openLightbox('images/ch10/0046.jpg')"></div><figcaption>Haust 2022.</figcaption></figure><figure class="photocard"><img src="images/ch10/0047.jpg" loading="lazy" alt="" onclick="openLightbox('images/ch10/0047.jpg')"><figcaption>21.11.2022 í Yndisauka. Sveinbjörn, Ineke, Jóna, Sigurður Briem, Sigurður Egill, Ólafur Sigurðsson, Svava, Jónas, Jakob. Jón Kristinsson tók myndina.</figcaption></figure><figure class="photocard"><img src="images/ch10/0048.jpg" loading="lazy" alt="" onclick="openLightbox('images/ch10/0048.jpg')"><figcaption>21.11.2022. Jakob, Jón Kristinsson, Sveinbjörn, Ineke.</figcaption></figure><figure class="photocard"><img src="images/ch10/0049.jpg" loading="lazy" alt="" onclick="openLightbox('images/ch10/0049.jpg')"><figcaption>21.11.2022.  Ólafur Sigurðsson og Svava. Jón Kristinsson tók myndina.</figcaption></figure><figure class="photocard"><img src="images/ch10/0050.jpg" loading="lazy" alt="" onclick="openLightbox('images/ch10/0050.jpg')"><figcaption>21.11.2022. Sveinbjörn og Ineke. Jón Kristinsson tók myndina.</figcaption></figure><figure class="photocard"><img src="images/ch10/0051.jpg" loading="lazy" alt="" onclick="openLightbox('images/ch10/0051.jpg')"><figcaption>21.11.2022. Gerða, Sigrún, Jóna, Sigurður Egill. Jón Kristinsson tók myndina.</figcaption></figure><figure class="photocard"><img src="images/ch10/0052.jpg" loading="lazy" alt="" onclick="openLightbox('images/ch10/0052.jpg')"><figcaption>21.11. 2022. Jónas. Jón Kristinsson tók myndina</figcaption></figure><figure class="photocard"><img src="images/ch10/0053.jpg" loading="lazy" alt="" onclick="openLightbox('images/ch10/0053.jpg')"><figcaption>21.11.2022. Jónas. Jón Kristinsson tók myndina</figcaption></figure><figure class="photocard"><img src="images/ch10/0054.jpg" loading="lazy" alt="" onclick="openLightbox('images/ch10/0054.jpg')"><figcaption>21.11.2022. Á Jakobsvegi. Sveinbjörn, Jakob.</figcaption></figure></div>
+      <div class="navbtns">
+        <a href="chapter_09.html">&larr; Kafli 9: Göngur 2016–2019</a>
+        <a href="chapter_11.html">Kafli 11: Göngur 2023–2026 &rarr;</a>
+      </div>
+      <footer>Gönguhópurinn Alviðra — stofnaður 2007</footer>
+    </div>
+  </div>
+</div>
+<div id="lightbox"><img id="lightbox-img" src=""></div>
+<script>
+function openLightbox(src) {
+  const lb = document.getElementById('lightbox');
+  document.getElementById('lightbox-img').src = src;
+  lb.classList.add('open');
+}
+document.getElementById('lightbox').addEventListener('click', function() {
+  this.classList.remove('open');
+});
+</script>
+</body>
+</html>
