@@ -106,6 +106,15 @@ footer { text-align:center; color:var(--sub); font-size:0.8rem; margin-top:40px;
 .roster-table tbody tr:nth-child(even) td { background:var(--bg); }
 .roster-table td.rd, .roster-table td.rdd { white-space:nowrap; color:var(--sub); font-variant-numeric:tabular-nums; }
 
+#gate-overlay { position:fixed; inset:0; z-index:9999; background:var(--bg); display:flex; align-items:center; justify-content:center; padding:20px; }
+.gate-box { background:var(--card); border-radius:18px; padding:36px 32px; max-width:360px; width:100%; box-shadow:0 12px 40px var(--shadow); text-align:center; }
+.gate-box h2 { font-family:'Fraunces',Georgia,serif; margin:0 0 8px; font-size:1.4rem; }
+.gate-box p { color:var(--sub); font-size:0.9rem; margin:0 0 20px; }
+.gate-box input[type=password] { width:100%; padding:11px 14px; border:1px solid var(--line); border-radius:10px; font-size:1rem; margin-bottom:12px; box-sizing:border-box; }
+.gate-box button { width:100%; padding:11px 14px; border:none; border-radius:10px; background:var(--accent2); color:#fff; font-size:1rem; font-weight:600; cursor:pointer; }
+.gate-box button:hover { opacity:0.9; }
+.gate-error { color:#b3261e; font-size:0.85rem; margin-top:10px; min-height:1.1em; }
+
 .event-lead { font-size:0.95rem; margin:0 0 14px; padding:12px 16px; background:var(--card); border:1px solid var(--line); border-radius:12px; }
 .event-table-wrap { overflow-x:auto; border:1px solid var(--line); border-radius:14px; }
 .event-table { width:100%; border-collapse:collapse; font-size:0.86rem; }
@@ -140,6 +149,48 @@ footer { text-align:center; color:var(--sub); font-size:0.8rem; margin-top:40px;
 </style>
 </head>
 <body>
+<div id="gate-overlay">
+  <div class="gate-box">
+    <h2>Alviðra</h2>
+    <p>Þessi vefur er eingöngu fyrir gönguhópinn. Sláðu inn lykilorðið til að halda áfram.</p>
+    <form id="gate-form" autocomplete="off">
+      <input type="password" id="gate-pw" placeholder="Lykilorð" autofocus>
+      <button type="submit">Áfram</button>
+      <div class="gate-error" id="gate-err"></div>
+    </form>
+  </div>
+</div>
+<script>
+(function() {
+  var overlay = document.getElementById('gate-overlay');
+  if (!overlay) return;
+  try {
+    if (localStorage.getItem('alvidra_unlocked') === '1') {
+      overlay.style.display = 'none';
+      return;
+    }
+  } catch (e) {}
+  async function sha256(msg) {
+    var buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(msg));
+    return Array.from(new Uint8Array(buf)).map(function(b) { return b.toString(16).padStart(2, '0'); }).join('');
+  }
+  var form = document.getElementById('gate-form');
+  var pwInput = document.getElementById('gate-pw');
+  var err = document.getElementById('gate-err');
+  form.addEventListener('submit', async function(ev) {
+    ev.preventDefault();
+    var hash = await sha256(pwInput.value);
+    if (hash === 'c47fb8fa2d8ce0396878bef16ee74801f308e00dad53396b46d0928e5617991b') {
+      try { localStorage.setItem('alvidra_unlocked', '1'); } catch (e) {}
+      overlay.style.display = 'none';
+    } else {
+      err.textContent = 'Rangt lykilorð, reyndu aftur.';
+      pwInput.value = '';
+      pwInput.focus();
+    }
+  });
+})();
+</script>
 <div class="layout">
   <nav class="sidebar">
       <a class="sb-title active" href="index.html">Alviðra</a>
