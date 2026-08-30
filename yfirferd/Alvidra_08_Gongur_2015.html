@@ -194,6 +194,42 @@ window.toggleStatus = function(id, status) {
   saveDecision(id, {status: cur === status ? null : status});
 }
 
+const SHEET_URL = 'https://script.google.com/macros/s/AKfycbxqJCXhPNbrALpwvNGYLDIYMFtX4ApCybc62wP_ys4TJKajLljaidaWXxbemVosz8O8KQ/exec';
+
+function itemForSheet(it) {
+  const d = decisions[it.id] || {};
+  const wasEdited = d.editedText != null && d.editedText !== '';
+  return {
+    id: it.id,
+    type: it.type,
+    status: d.status || '',
+    note: d.note || '',
+    cover: !!d.cover,
+    editedText: wasEdited ? d.editedText : '',
+  };
+}
+
+function postToSheet(items) {
+  if (!SHEET_URL) return Promise.resolve();
+  const payload = { chapter: CHAPTER.chapter, title: CHAPTER.title, items: items };
+  return fetch(SHEET_URL, {
+    method: 'POST',
+    mode: 'no-cors',
+    headers: {'Content-Type': 'text/plain;charset=utf-8'},
+    body: JSON.stringify(payload),
+  }).catch(function(e) { console.warn('sheet sync failed', e); });
+}
+
+function syncOneToSheet(id) {
+  const it = ITEMS.find(x => x.id === id);
+  if (!it) return;
+  postToSheet([itemForSheet(it)]);
+}
+
+function syncAllToSheet() {
+  return postToSheet(ITEMS.map(itemForSheet));
+}
+
 function saveDecision(id, patch) {
   const prev = decisions[id] || {status: null, note: '', cover: false};
   const next = Object.assign({}, prev, patch, {updatedAt: Date.now()});
@@ -205,6 +241,7 @@ function saveDecision(id, patch) {
   msg.textContent = 'Vistað ✓';
   clearTimeout(window._saveMsgTimer);
   window._saveMsgTimer = setTimeout(() => { msg.textContent = ''; }, 1500);
+  syncOneToSheet(id);
 }
 
 const editingIds = new Set();
@@ -321,6 +358,7 @@ document.getElementById('filters').addEventListener('click', (e) => {
 });
 
 document.getElementById('exportBtn').addEventListener('click', async () => {
+  syncAllToSheet();
   const out = {
     chapter: CHAPTER.chapter,
     title: CHAPTER.title,
