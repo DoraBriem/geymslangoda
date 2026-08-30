@@ -22,7 +22,17 @@
   .sub { color: var(--sub); font-size: 0.95rem; margin-bottom: 14px; }
   .instructions {
     background: var(--card); border: 2px solid var(--accent); border-radius: 12px;
-    padding: 16px 18px; font-size: 0.95rem; line-height: 1.6; margin-bottom: 18px;
+    padding: 16px 18px; font-size: 0.95rem; line-height: 1.6; margin-bottom: 0; flex: 1;
+  }
+  .top-row { display: flex; gap: 14px; align-items: stretch; margin-bottom: 18px; }
+  .counts-box {
+    background: var(--card); border: 2px solid var(--accent); border-radius: 12px;
+    padding: 16px 18px; flex: 0 0 170px; font-size: 0.86rem;
+  }
+  .counts-box .ctitle { color: var(--accent); font-weight: 700; display: block; margin-bottom: 10px; }
+  @media (max-width: 640px) {
+    .top-row { flex-direction: column; }
+    .counts-box { flex: 1; }
   }
   .instructions b { color: var(--accent); }
   .instructions ol { margin: 8px 0 0; padding-left: 22px; }
@@ -31,7 +41,7 @@
     position: sticky; top: 0; background: var(--bg); z-index: 5; padding: 10px 0 12px;
     border-bottom: 1px solid var(--line); margin-bottom: 16px;
   }
-  .counts { display: flex; gap: 10px; flex-wrap: wrap; font-size: 0.88rem; margin-bottom: 10px; }
+  .counts { display: flex; flex-direction: column; gap: 6px; }
   .pill { padding: 4px 12px; border-radius: 999px; border: 1px solid var(--line); }
   .pill.keep { color: var(--keep); border-color: var(--keep); }
   .pill.skip { color: var(--skip); border-color: var(--skip); }
@@ -61,6 +71,7 @@
   .caption { font-size: 1rem; color: var(--ink); margin-bottom: 10px; white-space: pre-wrap; }
   .section-text { font-size: 0.95rem; color: var(--ink); white-space: pre-wrap; margin-bottom: 8px; }
   .section-text.collapsed { max-height: 4.4em; overflow: hidden; position: relative; }
+  .caption.collapsed { max-height: 5.9em; overflow: hidden; position: relative; -webkit-mask-image: linear-gradient(to bottom, black 70%, transparent 100%); mask-image: linear-gradient(to bottom, black 70%, transparent 100%); }
   .tag { display: inline-block; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.04em;
     color: var(--sub); margin-bottom: 6px; }
   .row { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin-bottom: 8px; }
@@ -95,23 +106,24 @@
   <a class="back" href="Alvidra_00_Byrja_her.html">&larr; Til baka í yfirlit</a>
   <h1>Göngur 2011</h1>
   <div class="sub">150 myndir · 150 atriði samtals</div>
+  <div class="top-row">
   <div class="instructions">
     <b>Svona virkar þetta:</b>
     <ol>
-      <li>Fyrir hverja mynd, smelltu á <b>Halda</b>, <b>Kannski</b> eða <b>Sleppa</b>.</li>
+      <li>Fyrir hverja mynd, smelltu á <b>Halda</b> eða <b>Sleppa</b>.</li>
       <li>Ef texti eða myndatexti er rangur eða þarf lagfæringu, smelltu á <b>✏️ Breyta texta</b> og skrifaðu nýjan texta.</li>
       <li>Þú mátt sleppa athugasemdinni — hún er valfrjáls.</li>
       <li>Merkingarnar vistast sjálfkrafa í þessum vafra, svo þú mátt loka síðunni og koma aftur síðar.</li>
       <li>Þegar þú ert búin/n (eða líka þó þú náir ekki að klára), smelltu á stóra takkann <b>„Vista niðurstöður"</b> neðst og sendu skrána sem vistast á Dóru, t.d. í tölvupósti.</li>
     </ol>
   </div>
+  <div class="counts-box"><span class="ctitle">Staða</span><div class="counts" id="counts"></div></div>
+  </div>
   <div class="bar">
-    <div class="counts" id="counts"></div>
     <div class="filters" id="filters">
       <button data-f="all" class="active">Allt</button>
       <button data-f="unreviewed">Óskoðað</button>
       <button data-f="keep">Halda</button>
-      <button data-f="maybe">Kannski</button>
       <button data-f="skip">Sleppa</button>
       <button data-f="cover">Forsíðutillögur</button>
     </div>
@@ -148,19 +160,17 @@ function persistToStorage() {
 
 function renderCounts() {
   const total = ITEMS.length;
-  let keep=0, skip=0, maybe=0, unreviewed=0, cover=0;
+  let keep=0, skip=0, unreviewed=0, cover=0;
   for (const it of ITEMS) {
     const d = decisions[it.id];
     if (!d || !d.status) unreviewed++;
     else if (d.status === 'keep') keep++;
     else if (d.status === 'skip') skip++;
-    else if (d.status === 'maybe') maybe++;
     if (d && d.cover) cover++;
   }
   document.getElementById('counts').innerHTML = `
     <span class="pill">Alls ${total}</span>
     <span class="pill keep">Halda ${keep}</span>
-    <span class="pill maybe">Kannski ${maybe}</span>
     <span class="pill skip">Sleppa ${skip}</span>
     <span class="pill">Óskoðað ${unreviewed}</span>
     <span class="pill">Forsíða ★ ${cover}</span>
@@ -173,11 +183,15 @@ function passesFilter(it) {
   switch (currentFilter) {
     case 'unreviewed': return !status;
     case 'keep': return status === 'keep';
-    case 'maybe': return status === 'maybe';
     case 'skip': return status === 'skip';
     case 'cover': return !!(d && d.cover);
     default: return true;
   }
+}
+
+window.toggleStatus = function(id, status) {
+  const cur = decisions[id] && decisions[id].status;
+  saveDecision(id, {status: cur === status ? null : status});
 }
 
 function saveDecision(id, patch) {
@@ -242,7 +256,9 @@ function cardHtml(it) {
         <button class="edit-cancel" onclick="cancelEdit('${it.id}')">Hætta við</button>
       </div>`;
   } else if (it.type === 'photo') {
-    textBlock = (textNow ? `<div class="caption">${esc(textNow)}${wasEdited ? ' <span class="editedTag">(breytt)</span>' : ''}</div>` : '')
+    const capShort = textNow.length > 220;
+    textBlock = (textNow ? `<div class="caption ${capShort ? 'collapsed' : ''}" id="txt-${it.id}">${esc(textNow)}${wasEdited ? ' <span class="editedTag">(breytt)</span>' : ''}</div>` : '')
+              + (capShort ? `<button class="expand-btn" onclick="toggleExpand('${it.id}')">Sjá meira</button>` : '')
               + `<button class="expand-btn" onclick="startEdit('${it.id}')">✏️ Breyta texta</button>`;
   } else {
     const short = textNow.length > 220;
@@ -263,14 +279,13 @@ function cardHtml(it) {
       ${body}
       <div class="row">
         <div class="seg">
-          <button class="${status==='keep' ? 'sel-keep' : ''}" onclick="saveDecision('${it.id}', {status:'keep'})">Halda</button>
-          <button class="${status==='maybe' ? 'sel-maybe' : ''}" onclick="saveDecision('${it.id}', {status:'maybe'})">Kannski</button>
-          <button class="${status==='skip' ? 'sel-skip' : ''}" onclick="saveDecision('${it.id}', {status:'skip'})">Sleppa</button>
+          <button class="${status==='keep' ? 'sel-keep' : ''}" onclick="toggleStatus('${it.id}', 'keep')">Halda</button>
+          <button class="${status==='skip' ? 'sel-skip' : ''}" onclick="toggleStatus('${it.id}', 'skip')">Sleppa</button>
         </div>
         ${coverControl}
       </div>
       <div class="row">
-        <input class="note" type="text" placeholder="Athugasemd (t.d. óskýr, tvínefni)" value="${esc(note)}"
+        <input class="note" type="text" placeholder="Athugasemd (ef það þarf að útskýra eitthvað sérstakt)" value="${esc(note)}"
           onchange="saveDecision('${it.id}', {note: this.value})">
       </div>
     </div>
