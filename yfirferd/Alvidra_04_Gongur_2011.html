@@ -70,8 +70,7 @@
   .card img { display: block; max-width: 100%; border-radius: 8px; margin-bottom: 10px; }
   .caption { font-size: 1rem; color: var(--ink); margin-bottom: 10px; white-space: pre-wrap; }
   .section-text { font-size: 0.95rem; color: var(--ink); white-space: pre-wrap; margin-bottom: 8px; }
-  .section-text.collapsed { max-height: 4.4em; overflow: hidden; position: relative; }
-  .caption.collapsed { max-height: 5.9em; overflow: hidden; position: relative; -webkit-mask-image: linear-gradient(to bottom, black 70%, transparent 100%); mask-image: linear-gradient(to bottom, black 70%, transparent 100%); }
+  .section-text.collapsed, .caption.collapsed { max-height: 5.9em; overflow: hidden; position: relative; -webkit-mask-image: linear-gradient(to bottom, black 70%, transparent 100%); mask-image: linear-gradient(to bottom, black 70%, transparent 100%); }
   .tag { display: inline-block; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.04em;
     color: var(--sub); margin-bottom: 6px; }
   .row { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin-bottom: 8px; }
@@ -110,11 +109,11 @@
   <div class="instructions">
     <b>Svona virkar þetta:</b>
     <ol>
-      <li>Fyrir hverja mynd, smelltu á <b>Halda</b> eða <b>Sleppa</b>.</li>
+      <li>Smelltu á <b>Halda</b> eða <b>Sleppa</b> við hverja mynd eða textabút.</li>
       <li>Ef texti eða myndatexti er rangur eða þarf lagfæringu, smelltu á <b>✏️ Breyta texta</b> og skrifaðu nýjan texta.</li>
       <li>Þú mátt sleppa athugasemdinni — hún er valfrjáls.</li>
-      <li>Merkingarnar vistast sjálfkrafa í þessum vafra, svo þú mátt loka síðunni og koma aftur síðar.</li>
-      <li>Þegar þú ert búin/n (eða líka þó þú náir ekki að klára), smelltu á stóra takkann <b>„Vista niðurstöður"</b> neðst og sendu skrána sem vistast á Dóru, t.d. í tölvupósti.</li>
+      <li>Allar merkingar sendast sjálfkrafa til Dóru um leið og þú velur — þú þarft ekki að muna eftir að vista neitt sérstaklega, og mátt loka síðunni og koma aftur síðar.</li>
+      <li>Takkinn <b>„Vista niðurstöður"</b> neðst er bara til vara — þú þarft ekki að nota hann nema Dóra biðji sérstaklega um það.</li>
     </ol>
   </div>
   <div class="counts-box"><span class="ctitle">Staða</span><div class="counts" id="counts"></div></div>
@@ -295,12 +294,12 @@ function cardHtml(it) {
   } else if (it.type === 'photo') {
     const capShort = textNow.length > 220;
     textBlock = (textNow ? `<div class="caption ${capShort ? 'collapsed' : ''}" id="txt-${it.id}">${esc(textNow)}${wasEdited ? ' <span class="editedTag">(breytt)</span>' : ''}</div>` : '')
-              + (capShort ? `<button class="expand-btn" onclick="toggleExpand('${it.id}')">Sjá meira</button>` : '')
+              + (capShort ? `<button class="expand-btn" id="btn-${it.id}" onclick="toggleExpand('${it.id}')">Sjá meira</button>` : '')
               + `<button class="expand-btn" onclick="startEdit('${it.id}')">✏️ Breyta texta</button>`;
   } else {
     const short = textNow.length > 220;
     textBlock = `<div class="section-text ${short ? 'collapsed' : ''}" id="txt-${it.id}">${esc(textNow)}${wasEdited ? ' <span class="editedTag">(breytt)</span>' : ''}</div>`
-         + (short ? `<button class="expand-btn" onclick="toggleExpand('${it.id}')">Sjá meira</button>` : '')
+         + (short ? `<button class="expand-btn" id="btn-${it.id}" onclick="toggleExpand('${it.id}')">Sjá meira</button>` : '')
          + `<button class="expand-btn" onclick="startEdit('${it.id}')">✏️ Breyta texta</button>`;
   }
   if (it.type === 'photo') {
@@ -347,6 +346,8 @@ function renderList() {
 window.toggleExpand = function(id) {
   const el = document.getElementById('txt-' + id);
   el.classList.toggle('collapsed');
+  const btn = document.getElementById('btn-' + id);
+  if (btn) btn.textContent = el.classList.contains('collapsed') ? 'Sjá meira' : 'Sjá minna';
 }
 
 document.getElementById('filters').addEventListener('click', (e) => {
