@@ -2,6 +2,7 @@
 <style>
   :root {
     --bg: #faf8f4; --card: #ffffff; --ink: #2a2521; --sub: #6b6259; --line: #e7e0d6; --accent: #7a5c3e;
+    --keep: #3f7d4a; --skip: #b5473a;
   }
   * { box-sizing: border-box; }
   html { font-size: 19px; }
@@ -11,11 +12,25 @@
   p.lead { color: var(--sub); font-size: 0.95rem; line-height: 1.5; margin-bottom: 20px; }
   .howto {
     background: var(--card); border: 2px solid var(--accent); border-radius: 12px; padding: 16px 18px;
-    font-size: 0.95rem; line-height: 1.6; margin-bottom: 24px;
+    font-size: 0.95rem; line-height: 1.6; margin-bottom: 0; flex: 1;
   }
   .howto b { color: var(--accent); }
   .howto ol { margin: 8px 0 0; padding-left: 22px; }
   .howto li { margin-bottom: 6px; }
+  .top-row { display: flex; gap: 14px; align-items: stretch; margin-bottom: 24px; }
+  .counts-box {
+    background: var(--card); border: 2px solid var(--accent); border-radius: 12px;
+    padding: 16px 18px; flex: 0 0 170px; font-size: 0.86rem;
+  }
+  .counts-box .ctitle { color: var(--accent); font-weight: 700; display: block; margin-bottom: 10px; }
+  .counts { display: flex; flex-direction: column; gap: 6px; }
+  .pill { padding: 4px 12px; border-radius: 999px; border: 1px solid var(--line); display: inline-block; }
+  .pill.keep { color: var(--keep); border-color: var(--keep); }
+  .pill.skip { color: var(--skip); border-color: var(--skip); }
+  @media (max-width: 640px) {
+    .top-row { flex-direction: column; }
+    .counts-box { flex: 1; }
+  }
   .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 14px; }
   .card {
     display: block; background: var(--card); border: 1px solid var(--line); border-radius: 12px;
@@ -30,6 +45,7 @@
 <div class="wrap">
   <h1>Alviðra — ljósmyndayfirferð</h1>
   <p class="lead">Alls 1246 myndir í 12 köflum. Smelltu á kafla til að byrja.</p>
+  <div class="top-row">
   <div class="howto">
     <b>Svona virkar þetta:</b>
     <ol>
@@ -38,6 +54,8 @@
       <li>Allt sendist sjálfkrafa til Dóru um leið og þú velur — þú þarft ekki að vista neitt sérstaklega, og mátt loka og koma aftur síðar.</li>
       <li>Komdu svo aftur á þessa síðu (t.d. með því að fara til baka í vafranum) til að velja næsta kafla.</li>
     </ol>
+  </div>
+  <div class="counts-box"><span class="ctitle">Staða — allir kaflar</span><div class="counts" id="counts"></div></div>
   </div>
   <div class="grid">
     
@@ -104,3 +122,36 @@
   </div>
   <footer>Alviðra ljósmyndabók — undirbúningur</footer>
 </div>
+<script>
+const CHAPTER_TOTALS = {"01":36,"02":75,"03":193,"04":150,"05":80,"06":49,"07":118,"08":86,"09":96,"10":55,"11":141,"12":190};
+
+function renderTotalCounts() {
+  let total = 0, keep = 0, skip = 0, cover = 0;
+  for (const num in CHAPTER_TOTALS) {
+    total += CHAPTER_TOTALS[num];
+    let decisions = {};
+    try {
+      const raw = localStorage.getItem('alvidra_decisions_kafli_' + num);
+      if (raw) decisions = JSON.parse(raw);
+    } catch (e) { /* ignore */ }
+    for (const id in decisions) {
+      const d = decisions[id];
+      if (d && d.status === 'keep') keep++;
+      else if (d && d.status === 'skip') skip++;
+      if (d && d.cover) cover++;
+    }
+  }
+  const unreviewed = total - keep - skip;
+  const el = document.getElementById('counts');
+  if (el) {
+    el.innerHTML = `
+      <span class="pill">Alls ${total}</span>
+      <span class="pill keep">Halda ${keep}</span>
+      <span class="pill skip">Sleppa ${skip}</span>
+      <span class="pill">Óskoðað ${unreviewed}</span>
+      <span class="pill">Forsíða ★ ${cover}</span>
+    `;
+  }
+}
+renderTotalCounts();
+</script>
